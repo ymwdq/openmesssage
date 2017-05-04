@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class YmMessageCache {
     // max block size is 128MB
-    private final double MAX_BUCKET_SIZE = 5 ;
+    private final double MAX_BUCKET_SIZE = 1024 * 8 * 1024 ;
     // total max cache size is 2048MB
     private final double MAX_CACHE_SIZE = 128;
     private int current_size = 0;

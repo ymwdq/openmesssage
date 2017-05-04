@@ -10,8 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class YmTester {
     public static void main(String[] args) {
-        testCache();
+//        testCache();
 //        testNoCache();
+        testBucketCache();
     }
 
     public static void testCache() {
@@ -97,7 +98,7 @@ public class YmTester {
         log.printTime();
     }
 
-    public static void TestBucketCache() {
+    public static void testBucketCache() {
         YmBucketCache cache = YmBucketCache.getInstance();
         DefaultKeyValue properties = new DefaultKeyValue();
         properties.put("STORE_PATH", "/home/ym/download/");
@@ -110,10 +111,10 @@ public class YmTester {
         file.createFile();
         Message message;
         log.startCount();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10 * 1024; i++) {
             for (String topic : topics) {
-                message = producer.createBytesMessageToTopic(topic, new byte[1]);
-                cache.addMessage(message, 1);
+                message = producer.createBytesMessageToTopic(topic, new byte[128 * 1024]);
+                cache.addMessage(message, 128 * 1024);
             }
 //           for (String queue : queues) {
 //               message = producer.createBytesMessageToQueue(queue, new byte[128 * 1024]);
@@ -127,15 +128,16 @@ public class YmTester {
                 }
             }
         }
+
         LinkedList<Message> cachedBucket = (LinkedList<Message>) cache.getBucket();
         for (Message each : cachedBucket) {
             file.writeContent(new String(((DefaultBytesMessage)each).getBody()));
         }
+
         file.flush();
         file.close();
         log.endCount();
         log.printTime();
     }
-
 
 }

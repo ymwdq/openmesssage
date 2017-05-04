@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class YmBucketCache {
     private List<Message> bucket;
-    private double MAX_BUCKET_SIZE = 256 * 1024;
+    private double MAX_BUCKET_SIZE = 256 * 1024 * 1024;
     private double currentSize = 0;
     private static YmBucketCache cache = new YmBucketCache();
     private YmBucketCache() {
