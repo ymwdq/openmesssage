@@ -1,6 +1,7 @@
 package io.openmessaging.demo;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -9,7 +10,7 @@ import java.io.IOException;
  */
 public class YmSimpleFileUtil {
     String filePath;
-    FileWriter writer;
+    FileOutputStream writer;
     File file;
     public void createFile() {
         file =  new File(filePath);
@@ -26,13 +27,13 @@ public class YmSimpleFileUtil {
         this.filePath = path + fileName;
         file = new File(filePath);
         try {
-            writer = new FileWriter(file, isAppend);
+            writer = new FileOutputStream(file, isAppend);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void writeContent(String content) {
+    public void writeContent(byte[] content) {
 //        System.out.println("filepath ->" + filePath);
         try {
             writer.write(content);

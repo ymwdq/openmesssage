@@ -12,7 +12,7 @@ public class YmTester {
     public static void main(String[] args) {
 //        testCache();
 //        testNoCache();
-        testBucketCache();
+//        testBucketCache();
     }
 
     public static void testCache() {
@@ -28,10 +28,10 @@ public class YmTester {
 //        file.createFile();
         Message message;
         log.startCount();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1024; i++) {
            for (String topic : topics) {
-               message = producer.createBytesMessageToTopic(topic, new byte[1]);
-               cache.addMessage(message, 1);
+               message = producer.createBytesMessageToTopic(topic, new byte[182 * 1024]);
+               cache.addMessage(message, 128 * 1024);
            }
 //           for (String queue : queues) {
 //               message = producer.createBytesMessageToQueue(queue, new byte[128 * 1024]);
@@ -84,7 +84,7 @@ public class YmTester {
         for (int i = 0; i < 1024; i++) {
             for (String topic : topics) {
                 message = producer.createBytesMessageToTopic(topic, new byte[128 * 1024]);
-                file.writeContent(new String(((DefaultBytesMessage)message).getBody()));
+                file.writeContent(((DefaultBytesMessage)message).getBody());
             }
 //           for (String queue : queues) {
 //               message = producer.createBytesMessageToQueue(queue, new byte[128 * 1024]);
@@ -124,14 +124,14 @@ public class YmTester {
                 System.out.println("bucketFull");
                 LinkedList<Message> messages = (LinkedList<Message>) cache.getAndReleaseBucket();
                 for (Message each : messages) {
-                   file.writeContent(new String(((DefaultBytesMessage)each).getBody()));
+                   file.writeContent(((DefaultBytesMessage)each).getBody());
                 }
             }
         }
 
         LinkedList<Message> cachedBucket = (LinkedList<Message>) cache.getBucket();
         for (Message each : cachedBucket) {
-            file.writeContent(new String(((DefaultBytesMessage)each).getBody()));
+            file.writeContent(((DefaultBytesMessage)each).getBody());
         }
 
         file.flush();
